@@ -13,17 +13,7 @@ class Gato extends Animal {
     return super.getEspecie();
   }
 
-  @override
-  String getTipoAnimal() {
-    // TODO: implement getTipoAnimal
-    return super.getTipoAnimal();
-  }
 
-  @override
-  void setTipoAnimal(String tipoAnimalParametro) {
-    // TODO: implement setTipoAnimal
-    super.setTipoAnimal(tipoAnimalParametro);
-  }
   
   @override
   void setEspecie(String nomeEspecie) {

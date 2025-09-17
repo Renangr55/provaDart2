@@ -6,13 +6,7 @@ class Cobra extends Animal {
 
   Cobra({required this.corCobra});
 
-  @override
-  String getTipoAnimal() {
-    // TODO: implement getTipoAnimal
-    return super.getTipoAnimal();
-  }
 
-  
 
   @override
   String getEspecie() {
@@ -24,11 +18,6 @@ class Cobra extends Animal {
     super.setEspecie(nomeEspecie);
   }
 
-  @override
-  void setTipoAnimal(String tipoAnimalParametro) {
-    // TODO: implement setTipoAnimal
-    super.setTipoAnimal(tipoAnimalParametro);
-  }
 
   @override
   void emitirsom() {
