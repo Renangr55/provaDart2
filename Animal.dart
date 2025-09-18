@@ -8,7 +8,10 @@ class Animal {
   List<String> porte = ["pequeno","médio","alto"];
   String _porteAnimal = "";
 
-
+  String getEspecieParametro(String nomeEspecieUser){
+    _especie = nomeEspecieUser;
+    return _especie;
+  }
   
   String getEspecie (){
     return _especie;
@@ -51,7 +54,7 @@ class Animal {
 }
 
 
-void main(){
+ void main(){
   
   List<Animal> listaAnimais = [];
   bool loop = true;
@@ -73,7 +76,7 @@ void main(){
         opcaoMenu = int.parse(stdin.readLineSync()!);
 
         if(opcaoMenu.isNaN || opcaoMenu.isNegative){
-          print("Insira um valor Positivo inteiro");
+          print("Insira um valor Positivo inteiro de 1 a 6");
         } else {
           inputMenu = false;
         }
@@ -89,7 +92,6 @@ void main(){
         print("1 - cachorro");
         print("2 - Cobra");
         print("3 - Gato");
-        print("Você deseja cadastrar qual animal?");
         bool escolhaAnimalLoop = true;
         int escolhaAnimal = 0;
 
@@ -127,7 +129,7 @@ void main(){
                 print("Coloque a quantidade de Patas que o cachorro possui: ");
                 quantidadePatasCachorro = int.parse(stdin.readLineSync()!);
 
-                if(quantidadePatasCachorro.isNaN || quantidadePatasCachorro.isNegative || quantidadePatasCachorro > 0){
+                if(quantidadePatasCachorro.isNaN || quantidadePatasCachorro.isNegative){
                   print("Digite um número inteiro positivo");
                 } else{
                   validacaoQuantidadePatas = false;
@@ -312,6 +314,28 @@ void main(){
       case 2:
         listaAnimais.forEach(print);
         break;
+      case 3:
+        print("Você escolheu remover");
+        bool animalRemover = true;
+        while(animalRemover == true){
+          print("digite o animal que você quer excluir: ");
+          String especieRemovivel = stdin.readLineSync()!;
+          Animal kaka = Animal();
+          Animal teste = buscarAnimal(listaAnimais, especieRemovivel,kaka);
+          teste.setEspecie(especieRemovivel);
+          if(listaAnimais.contains(teste)){
+            for(int i = 0; i < listaAnimais.length; i++){
+              listaAnimais.remove(teste.getEspecie());
+            }
+            print("item removido: ${especieRemovivel} ");
+            animalRemover = false;
+          } else{
+            print("Não foi encotrado");
+          }
+
+        }
+         
+    
       case 6:
         loop = false;
         print("Zoológico está fechando");
@@ -319,10 +343,20 @@ void main(){
 
     }
   }
-  
-
-  
-  
+}
 
 
+Animal buscarAnimal(List<Animal> listaObjetos, String especieAnimalUsuario, Animal myclasse){
+  myclasse = Animal();
+  for(int i = 0; i < listaObjetos.length;i++){
+    if(listaObjetos.contains(myclasse.getEspecieParametro(especieAnimalUsuario))){
+      return myclasse;
+    }
+    else{
+      print("não foi encontrado");
+    }
+  }
+  return myclasse;
+  
+  
 }
