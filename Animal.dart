@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 import 'Cachorro.dart';
 import 'Cobra.dart';
@@ -5,7 +6,7 @@ import 'Gato.dart';
 
 class Animal {
   String _especie = "";
-  List<String> porte = ["pequeno","médio","alto"];
+  static List<String>  porte = ["pequeno","medio","alto"];
   String _porteAnimal = "";
 
   String getEspecieParametro(String nomeEspecieUser){
@@ -18,8 +19,14 @@ class Animal {
   }
 
 
-  void imprimindoPorte (){
-    porte.forEach((x) => print(x));
+  static void exibirListaAnimais(List<Object> listaParmetro){
+    if(listaParmetro.isEmpty){
+      print("lista vázia");
+    } else{
+      print("__________");
+      listaParmetro.forEach((x) => print(x));
+      print("__________");
+    }
   }
 
 
@@ -31,8 +38,6 @@ class Animal {
       print("não foi encontrado");
       _porteAnimal = "vázio";
     }
-
-
   }
 
   void setEspecie(String nomeEspecie){
@@ -48,15 +53,32 @@ class Animal {
 
   @override
   String toString() {
-    return super.toString() + "Especie do animal: ${_especie}  | porte do animal: ${_porteAnimal} ";
+    return super.toString() + "| Especie do animal: ${_especie}  | porte do animal: ${_porteAnimal} ";
   }
 
 }
 
 
- void main(){
-  
-  List<Animal> listaAnimais = [];
+void main(){
+    List<Animal> listaAnimais = [];
+
+    dynamic buscarAnimal(String especieUser){
+      for(Animal animal in listaAnimais){
+        if(animal.getEspecie() == especieUser){
+          return animal;
+        }
+        print("deu erro");
+      }
+      return Null;
+    }
+
+    void exibirPorte(){
+      print('________________');
+      print("Porte que suportamos");
+      Animal.porte.forEach(print);
+      print("________________");
+    }
+
   bool loop = true;
   print("seja bem vindo ao zoológico");
   while(loop == true){
@@ -92,6 +114,7 @@ class Animal {
         print("1 - cachorro");
         print("2 - Cobra");
         print("3 - Gato");
+        print("4 - outro animal");
         bool escolhaAnimalLoop = true;
         int escolhaAnimal = 0;
 
@@ -135,7 +158,7 @@ class Animal {
                   validacaoQuantidadePatas = false;
                 }
               } on FormatException{
-                print("Aceitamos somente string");
+                print("Aceitamos somente numeros positivos");
               }
 
             }
@@ -143,7 +166,7 @@ class Animal {
             while(validacaoEspecieCachorro == true){
               try{
                 print("Digite a espécie do cachorro");
-                especieCachorro = stdin.readLineSync()!;
+                especieCachorro = stdin.readLineSync()!.toLowerCase();
 
                 if(especieCachorro.trim().isEmpty){
                   print("formato Inválido");
@@ -154,23 +177,28 @@ class Animal {
                 print("Tente novamente");
               }
             }
-            
-            while(validacaPorteCachorro){
+            Cachorro cachorroUser;
+            while(validacaPorteCachorro == true){
               try{
+                exibirPorte();
                 print("Digite o porte do cachorro:");
-                porteCachorro = stdin.readLineSync()!;
+                porteCachorro = stdin.readLineSync()!.toLowerCase();
 
                 if(porteCachorro.trim().isEmpty){
                   print("inválido");
                 } else{
-                  validacaPorteCachorro = false;
-                }
+                  if(Animal.porte.contains(porteCachorro)){
+                    print("esse porte existe");
+                    validacaPorteCachorro = false;
+                  } else{
+                    print("esse porte não existe");
+                  }                }
               } on FormatException{
                 print("Formato inválido");
               }
             }
   
-            Cachorro cachorroUser = Cachorro(quantidadePatas: quantidadePatasCachorro);
+            cachorroUser = Cachorro(quantidadePatas: quantidadePatasCachorro);
             cachorroUser.setEspecie(especieCachorro);
             cachorroUser.setPorteTipoAnimal(porteCachorro);
             listaAnimais.add(cachorroUser);
@@ -192,7 +220,7 @@ class Animal {
             while(validacaoCorCobra == true){
               try{
                 print("Escolha a cor da cobra: ");
-                corCobra = stdin.readLineSync()!;
+                corCobra = stdin.readLineSync()!.toLowerCase();
 
                 if (corCobra.trim().isEmpty){
                   print("formato INESPERADO");
@@ -208,7 +236,7 @@ class Animal {
             while(especieCobra == true){
               try{
                 print("Digite a espécie do cobra");
-                especieCobraUsuario = stdin.readLineSync()!;
+                especieCobraUsuario = stdin.readLineSync()!.toLowerCase();
 
                 if(especieCobraUsuario.trim().isEmpty){
                   print("esse campo não pode estar vázio");
@@ -224,13 +252,20 @@ class Animal {
 
             while(porteCobra == true){
               try{
+                exibirPorte();
                 print("Digite o porte da Cobra:");
-                porteCobraUsuario = stdin.readLineSync()!;
+                porteCobraUsuario = stdin.readLineSync()!.toLowerCase();
 
                 if(porteCobraUsuario.trim().isEmpty){
                   print("porte inválido");
                 } else{
-                  porteCobra = false;
+                  if(Animal.porte.contains(porteCobraUsuario)){
+                    print("esse porte existe");
+                    porteCobra = false;
+                  } else{
+                    print("esse porte não existe");
+                    porteCobra = false;
+                  }
                 }
 
               } on FormatException{
@@ -262,7 +297,7 @@ class Animal {
                 print("Escolha a idade do gato : ");
                 idadeGatoUsuario = int.parse(stdin.readLineSync()!);
 
-                if(idadeGatoUsuario.isNaN || idadeGatoUsuario.isNegative || idadeGatoUsuario > 0){
+                if(idadeGatoUsuario.isNaN || idadeGatoUsuario.isNegative){
                   print("tipo do número invalido!! aceitamos numero positivo");
                 } else{
                   inputIdadeGato = false;
@@ -271,11 +306,11 @@ class Animal {
                 print("Formato inválido");
               }
             }
- 
+
             while(inputEspecieGato == true){
               try{
                 print("Digite a espécie do gato");
-                especieGato = stdin.readLineSync()!; 
+                especieGato = stdin.readLineSync()!.toLowerCase(); 
 
                 if(especieGato.trim().isEmpty){
                   print("Não pode ser vázio");
@@ -289,53 +324,203 @@ class Animal {
 
             while(inputPorteGato == true){
               try{
-                print("Digite o porte do gato:");
-                porteGato = stdin.readLineSync()!;
+                exibirPorte();
+                print("Digite o porte do gato: ");
+                porteGato = stdin.readLineSync()!.toLowerCase();
 
                 if(porteGato.trim().isEmpty){
                   print("Digite novamente");
                 } else{
-                  inputPorteGato = false;
+                  if(Animal.porte.contains(porteGato)){
+                      print("esse porte existe");
+                      inputPorteGato = false;
+                  } else{
+                    print("esse porte não existe");
+                    inputPorteGato = false;
+                  }
                 }
               } on FormatException{
                 print("Formato inválido");
               }
             }
             
-            
-            Gato gatousuario = Gato(idadeGato: idadeGatoUsuario);
-            gatousuario.setEspecie(especieGato);
-            gatousuario.setPorteTipoAnimal(porteGato);
-            listaAnimais.add(gatousuario);
+            try{
+              Gato gatousuario = Gato(idadeGato: idadeGatoUsuario);
+              gatousuario.setEspecie(especieGato);
+              gatousuario.setPorteTipoAnimal(porteGato);
+              listaAnimais.add(gatousuario);
+            } catch(e){
+              print("deu erro ${e}");
+            }
             break;
+          case 4:
+          print("Você escolheu a opção de outro animal");
+
+            //controle das validações
+            bool inputEspecieAnimal = true;
+            bool inputPorteAnimal = true;
+
+            //setando variáveis
+            String especieAnimal = "";
+            String porteAnimal = "";
+            
+            while(inputEspecieAnimal == true){
+              try{
+                print("Digite a espécie do animal");
+                especieAnimal = stdin.readLineSync()!.toLowerCase(); 
+
+                if(especieAnimal.trim().isEmpty){
+                  print("Não pode ser vázio");
+                } else{
+                  inputEspecieAnimal = false;
+                }
+              } on FormatException{
+                print("Formato inválido");
+              }
+            };
+
+            while(inputPorteAnimal == true){
+              try{
+                exibirPorte();
+                print("Digite o porte do animal:");
+                porteAnimal = stdin.readLineSync()!.toLowerCase();
+
+                if(porteAnimal.trim().isEmpty){
+                  print("Digite novamente");
+                } else{
+                  if(Animal.porte.contains(porteAnimal)){
+                      print("esse porte existe");
+                      inputPorteAnimal = false;
+                  } else{
+                    print("esse porte não existe");
+                    inputPorteAnimal = false;
+                  }
+                }
+              } on FormatException{
+                print("Formato inválido");
+              }
+            }
+            
+            try{
+              Animal outroAnimalUsuario = Animal();
+              outroAnimalUsuario.setEspecie(especieAnimal);
+              outroAnimalUsuario.setPorteTipoAnimal(porteAnimal);
+              listaAnimais.add(outroAnimalUsuario);
+            } catch(e){
+              print("deu erro ${e}");
+            }
           default:
             print("Opção não reconhecida");
         }
       case 2:
-        listaAnimais.forEach(print);
+          print("___________");
+          Animal.exibirListaAnimais(listaAnimais);
+          print("___________");
         break;
-      case 3:
+        
+      case 3: //remover animal
         print("Você escolheu remover");
-        bool animalRemover = true;
-        while(animalRemover == true){
-          print("digite o animal que você quer excluir: ");
-          String especieRemovivel = stdin.readLineSync()!;
-          Animal kaka = Animal();
-          Animal teste = buscarAnimal(listaAnimais, especieRemovivel,kaka);
-          teste.setEspecie(especieRemovivel);
-          if(listaAnimais.contains(teste)){
-            for(int i = 0; i < listaAnimais.length; i++){
-              listaAnimais.remove(teste.getEspecie());
-            }
-            print("item removido: ${especieRemovivel} ");
-            animalRemover = false;
-          } else{
-            print("Não foi encotrado");
-          }
+        String especieRemovivel = "";
+        bool remocaoEspecie = true;
 
+        while(remocaoEspecie == true){
+          try{
+            print("Digite a especie que você deseja remover");
+            especieRemovivel = stdin.readLineSync()!.toLowerCase();
+            
+            if(especieRemovivel.trim().isEmpty){
+              print("Não pode ser vázio");
+            } else{
+              remocaoEspecie = false;;
+            }
+          } on FormatException{
+            print("erro! só aceitamos palavras com letras");
+          }
         }
-         
-    
+        
+
+        try{
+          Animal removendoAnimal = buscarAnimal(especieRemovivel);
+          listaAnimais.remove(removendoAnimal);
+          print("animal removido");
+        } catch(e){
+          print("deu erro ${e}");
+        }
+        break;
+      case 4:
+      //editar animal
+        print("Você escolheu editar");
+
+        print("escolha a especie que você deseja alterar");
+        String especieAlteravel = stdin.readLineSync()!.toLowerCase();
+
+        bool validacaoNovaEspecie = true;
+        bool validacaoNovaPorte = true;
+        String novaEspecie = "";
+        String novoPorte = "";
+
+        while(validacaoNovaEspecie == true){
+          try{
+            print("digite a nova especie: ");
+            novaEspecie = stdin.readLineSync()!.toLowerCase();
+
+            if(novaEspecie.trim().isEmpty){
+              print("esse campo não pode estar vázio");
+            } else{
+                validacaoNovaEspecie = false;
+            }
+          } on FormatException{
+            print("erro no formato do input");
+          }
+          
+        } 
+
+        while(validacaoNovaPorte == true){
+          try{
+            exibirPorte();
+            print("digite o novo porte: ");
+            novoPorte = stdin.readLineSync()!.toLowerCase();
+
+            if(novoPorte.trim().isEmpty){
+              print("esse campo não pode estar vázio");
+            } else{
+              if(Animal.porte.contains(novoPorte)){
+                print("possuimos esse porte para ser escolhido");
+                validacaoNovaPorte = false;
+              } else{
+                print("não encontramos esse porte");
+              }
+            }
+          } on FormatException{
+            print("erro no formato do input");
+          }
+          
+        } 
+
+        try{
+          Animal animalAlteravel = buscarAnimal(especieAlteravel);
+          animalAlteravel.setEspecie(novaEspecie);
+          animalAlteravel.setPorteTipoAnimal(novoPorte);
+        } catch(e){
+          print("deu erro em atuializar as informações");
+        }
+
+      case 5:
+        //filtrar animais
+        print("Você escolheu filtrar");
+
+        print("escolha qual especie você deseja filtrar");
+        String filtroEspecie = stdin.readLineSync()!.toLowerCase();
+
+        try{
+          Animal filtarEspecieUser = buscarAnimal(filtroEspecie);
+          print("____________________");
+          print("filtro aplicado para encontrar: ${filtarEspecieUser}");
+          print("__________________");
+        } catch(e){
+          print("deu erro");
+        }
+
       case 6:
         loop = false;
         print("Zoológico está fechando");
@@ -345,18 +530,3 @@ class Animal {
   }
 }
 
-
-Animal buscarAnimal(List<Animal> listaObjetos, String especieAnimalUsuario, Animal myclasse){
-  myclasse = Animal();
-  for(int i = 0; i < listaObjetos.length;i++){
-    if(listaObjetos.contains(myclasse.getEspecieParametro(especieAnimalUsuario))){
-      return myclasse;
-    }
-    else{
-      print("não foi encontrado");
-    }
-  }
-  return myclasse;
-  
-  
-}
